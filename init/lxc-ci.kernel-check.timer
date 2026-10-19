@@ -1,9 +1,0 @@
-[Unit]
-Description=lxc-ci - kernel check timer
-
-[Timer]
-OnBootSec=5m
-OnUnitActiveSec=5m
-
-[Install]
-WantedBy=timers.target

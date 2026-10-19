@@ -1,6 +1,0 @@
-#!/bin/sh
-set -eu
-
-git clone https://github.com/cowsql/cowsql-ci.git
-cd cowsql-ci
-./bin/check --testbed lxc
