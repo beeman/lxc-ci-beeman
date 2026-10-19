@@ -1,0 +1,50 @@
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Check out image recipe
+        uses: actions/checkout@v7.0.1
+
+      - name: Install distrobuilder and container build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes debootstrap gpg rsync squashfs-tools
+          sudo snap install distrobuilder --classic
+
+      - name: Build Debian Trixie ARM64 cloud container
+        run: |
+          sudo distrobuilder build-incus images/debian.yaml build \
+            --compression=gzip \
+            --type=unified \
+            -o image.architecture=arm64 \
+            -o image.name=debian-trixie-arm64-cloud \
+            -o image.release=trixie \
+            -o image.variant=cloud
+
+      - name: Record image checksum
+        run: |
+            cd build
+            sudo sha256sum debian-trixie-arm64-cloud.tar.gz | sudo tee SHA256SUMS > /dev/null
+
+      - name: Upload container image
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          if-no-files-found: error
+          name: debian-trixie-arm64-cloud
+          path: |
+            build/debian-trixie-arm64-cloud.tar.gz
+            build/SHA256SUMS
+    timeout-minutes: 30
+name: Build Debian Trixie
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build-debian.yml
+      - images/debian.yaml
+  push:
+    paths:
+      - .github/workflows/build-debian.yml
+      - images/debian.yaml
+  workflow_dispatch:
+permissions:
+  contents: read

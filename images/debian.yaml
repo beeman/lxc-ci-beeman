@@ -1157,6 +1157,7 @@ packages:
     - cloud-init
     - gpg
     - python3-debian
+    - ssh-import-id
     action: install
     variants:
     - cloud

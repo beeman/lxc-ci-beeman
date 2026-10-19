@@ -1,4 +1,0 @@
-External dependencies:
- - android-ndk-linux-x86_64.tar.bz2 (from Google)
- - exercise (from the Debian packaging)
- - genetlink.h (from a recent linux-libc-dev armhf build)
